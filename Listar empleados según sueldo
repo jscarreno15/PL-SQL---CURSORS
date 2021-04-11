@@ -1,0 +1,27 @@
+--Elabore un bloque anónimo PL/SQL que almacene en un objeto cursor la lista de empleados 
+--(código, nombres, apellidos y salario) 
+--que tiene un sueldo menor e igual $ 2,800. 
+--Mostrar el resultado por cada registro.
+--Utilizar el esquema de base de datos HR (Human Resources) que viene por defecto en Live SQL.
+
+DECLARE 
+    CURSOR LIST_EMPLOYEES  
+    IS
+    SELECT EMPLOYEE_ID, FIRST_NAME , LAST_NAME , SALARY FROM EMPLOYEES WHERE
+        SALARY <= 2800; -- declaramos el cursor con la condicion del saldo
+    
+    V_EMPLOYEE_ID EMPLOYEES.EMPLOYEE_ID%TYPE; --creacion de variables
+    V_FIRST_NAME EMPLOYEES.FIRST_NAME%TYPE;
+    V_LAST_NAME EMPLOYEES.LAST_NAME%TYPE;
+    V_SALARY  EMPLOYEES.SALARY%TYPE;
+
+BEGIN
+    OPEN LIST_EMPLOYEES; -- abrimos cursor
+    LOOP --iniciamos loop
+        FETCH LIST_EMPLOYEES INTO V_EMPLOYEE_ID,V_FIRST_NAME,V_LAST_NAME,V_SALARY; -- pedimos almacenar las coincidencias en las variables
+        EXIT WHEN LIST_EMPLOYEES%NOTFOUND; -- el loop termina cuando no obtenga mas datos
+        DBMS_OUTPUT.PUT_LINE(V_EMPLOYEE_ID ||'-'||V_FIRST_NAME ||'-'||V_LAST_NAME ||'-'||V_SALARY ); -- impresion de datos
+    END LOOP; --fin del bucle
+    CLOSE  LIST_EMPLOYEES;  --cerramos cursor
+END;
+-- no se manejaron excepciones
